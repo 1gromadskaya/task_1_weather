@@ -71,6 +71,7 @@ kotlin {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+            implementation("com.russhwolf:multiplatform-settings-test:1.1.1")
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)

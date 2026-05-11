@@ -12,9 +12,10 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel(
+    private val settings: Settings = Settings()
+) : ViewModel() {
     private val apiClient = WeatherApiClient()
-    private val settings = Settings()
 
     private val _weatherState = MutableStateFlow<WeatherResponse?>(null)
     val weatherState: StateFlow<WeatherResponse?> = _weatherState.asStateFlow()

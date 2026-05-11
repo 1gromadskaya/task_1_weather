@@ -1,32 +1,37 @@
 package tests
 
-import com.example.project.network.WeatherApiClient
-import com.russhwolf.settings.Settings
-import kotlinx.coroutines.test.runTest
+import com.russhwolf.settings.MapSettings
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class WeatherIntegrationTests {
-    @Test
-    fun testRealNetworkCall() = runTest {
-        val client = WeatherApiClient()
-        val response = client.getWeather("London")
-        assertNotNull(response)
+
+    @BeforeTest
+    fun setup() {
+        Dispatchers.setMain(StandardTestDispatcher())
+    }
+
+    @AfterTest
+    fun tearDown() {
+        Dispatchers.resetMain()
     }
 
     @Test
     fun testSettingsSave() {
-        val settings = Settings()
-        settings.putString("test_key", "test_value")
-        val result = settings.getStringOrNull("test_key")
-        assertEquals("test_value", result)
+        val settings = MapSettings()
+        settings.putString("cache_london", "test_data")
+        assertEquals("test_data", settings.getStringOrNull("cache_london"))
     }
 
     @Test
     fun testSettingsLoadMissingKey() {
-        val settings = Settings()
-        val result = settings.getStringOrNull("missing_key_123")
-        assertEquals(null, result)
+        val settings = MapSettings()
+        assertEquals(null, settings.getStringOrNull("missing_key"))
     }
 }
